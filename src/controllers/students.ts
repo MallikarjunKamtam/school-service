@@ -42,6 +42,16 @@ export const createStudent = async (req: Request, res: Response) => {
   }
 };
 
+export const createManyStudents = async (data) => {
+  try {
+    const newStudent = await Student.create(data);
+    return newStudent;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const updateStudent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
