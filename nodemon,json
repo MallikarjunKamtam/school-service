@@ -1,0 +1,8 @@
+ 
+{
+  "exec": "ts-node --inspect=0.0.0.0:9229",
+  "ext": "ts",
+  "watch": ["src"],
+  "ignore": ["src/**/*.spec.ts"],
+  "delay": 1500
+}
