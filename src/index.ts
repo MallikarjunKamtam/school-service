@@ -8,7 +8,9 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../docs/swagger.json");
 const port = process.env.PORT ?? 3000;
 const app = express();
+const helmet = require("helmet");
 
+app.use(helmet());
 app.use(cors());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
