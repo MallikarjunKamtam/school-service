@@ -45,10 +45,7 @@ export const createStudent = async (req: Request, res: Response) => {
 export const updateStudent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const updatedBody = req.body;
- 
 
-    
     const existingStudent = await Student.findByPk(id);
 
     if (!existingStudent) {
@@ -63,6 +60,24 @@ export const updateStudent = async (req: Request, res: Response) => {
       message: "Student updated successfully",
       student: updatedStudent,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const existingStudent = await Student.findByPk(id);
+
+    if (!existingStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    await existingStudent.destroy();
+
+    return res.json({ message: "Student deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }

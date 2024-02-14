@@ -4,6 +4,7 @@ import {
   getStudentById,
   createStudent,
   updateStudent,
+  deleteStudent,
 } from "../controllers/students";
 import studentSchema from "../validations/students";
 
@@ -11,6 +12,8 @@ const router = express.Router();
 
 router.get("/students", getAllStudents);
 router.get("/students/:id", getStudentById);
+
+router.delete("/student/:id", deleteStudent);
 
 router.post("/student", async (req, res) => {
   try {
