@@ -5,6 +5,7 @@ import {
   createStudent,
   updateStudent,
   deleteStudent,
+  createManyStudents,
 } from "../controllers/students";
 import studentSchema from "../validations/students";
 
@@ -30,6 +31,33 @@ router.post("/student", async (req, res) => {
     }
 
     return await createStudent(req, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.post("/many-students", async (req, res) => {
+  try {
+    const responseArr = [];
+    const reqArr = req.body.data;
+    for await (const student of reqArr) {
+      const { error, value } = studentSchema.validate(student, {
+        abortEarly: false,
+      });
+      if (error) {
+        return res
+          .status(400)
+          .json({ errors: error.details.map((e) => e.message) });
+      }
+
+      const response = await createManyStudents(student);
+      responseArr.push(response);
+    }
+
+    return res
+      .status(201)
+      .json({ message: "Created multiple records successfully", data: reqArr });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
