@@ -1,5 +1,5 @@
 // src/controllers/awardController.ts
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Awards } from "../../models/index";
 
 export const getAllAwards = async (req: Request, res: Response) => {
@@ -38,7 +38,11 @@ export const getAwardById = async (req: Request, res: Response) => {
   }
 };
 
-export const createAward = async (req: Request, res: Response) => {
+export const createAward = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const newAward = await Awards.create(req.body);
 
@@ -46,8 +50,7 @@ export const createAward = async (req: Request, res: Response) => {
       .status(201)
       .json({ message: "Awards created successfully", award: newAward });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
 

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import {
   getAllAwards,
   getAwardById,
@@ -15,7 +15,7 @@ router.get("/awards/:id", getAwardById);
 
 router.delete("/award/:id", deleteAward);
 
-router.post("/award", async (req, res) => {
+router.post("/award", async (req, res, next: NextFunction) => {
   try {
     // Validate the request body against the Joi schema
     const { error, value } = awardSchema.validate(req.body, {
@@ -29,10 +29,9 @@ router.post("/award", async (req, res) => {
         .json({ errors: error.details.map((e) => e.message) });
     }
 
-    return await createAward(req, res);
+    return await createAward(req, res, next);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 });
 
