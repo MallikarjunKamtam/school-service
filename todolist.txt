@@ -1,0 +1,2 @@
+Awards, USER, CLASSROOMS, SUBJECTS are independent tables. Need to create them first.
+
