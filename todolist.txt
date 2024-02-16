@@ -1,2 +1,23 @@
+TODO: 
+
 Awards, USER, CLASSROOMS, SUBJECTS are independent tables. Need to create them first.
+Teachers, Grades, Exams, TimeTable, Attendance
+-Authentication
+-Authorization
+-New Relic
+-Maintain dev and Master dbs and migrate them to Master
+-Deploy to AWS
+
+
+
+-----------------------------------------------------------------------------------------------------------
+COMPLETED:
+
+-Swagger documentation
+-Students table
+-Awards table
+-Entities Diagram
+
+
+
 

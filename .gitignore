@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -133,3 +134,14 @@ dist
 node_modules
 
 .vscode
+=======
+.env
+
+node_modules
+
+.vscode
+
+todohighlight.json
+
+ 
+>>>>>>> fcea2b2 (added global exception handler)
