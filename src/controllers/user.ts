@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
     res.status(201).json(newUser);
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(400).json({ error: "User name already taken" });
+      res.status(400).json({ error: "User name already taken!" });
     } else {
       res.status(500).json({ error: "Internal Server Error" });
     }
