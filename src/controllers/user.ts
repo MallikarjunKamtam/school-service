@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../models/index";
+import { UserDTO } from "../dto/users";
 const bcrypt = require("bcrypt");
 
 export const createUser = async (req, res) => {
@@ -13,7 +14,12 @@ export const createUser = async (req, res) => {
       password: hashedPassword,
       role,
     });
-    res.status(201).json(newUser);
+
+    const { createdAt, id, updatedAt } = newUser;
+
+    const output: UserDTO = { id, user_name, role, createdAt, updatedAt };
+
+    res.status(201).json(output);
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(400).json({ error: "User name already taken!" });
@@ -26,7 +32,14 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.findAll();
-    res.json(users);
+
+    const updatedUsers: UserDTO[] = users.map((item) => {
+      const { createdAt, id, role, updatedAt, user_name } = item;
+
+      return { id, user_name, role, createdAt, updatedAt };
+    });
+
+    res.json(updatedUsers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -43,7 +56,11 @@ export const getUserById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(user);
+    const { createdAt, id, updatedAt, user_name, role } = user;
+
+    const output: UserDTO = { id, user_name, role, createdAt, updatedAt };
+
+    res.json(output);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -52,7 +69,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = +req.params.id;
 
     const existingUser = await User.findByPk(id);
 
@@ -64,9 +81,13 @@ export const updateUser = async (req: Request, res: Response) => {
 
     const updatedUser = await User.findByPk(id);
 
+    const { createdAt, updatedAt, user_name, role } = updatedUser;
+
+    const output: UserDTO = { id, user_name, role, createdAt, updatedAt };
+
     return res.json({
       message: "User updated successfully",
-      user: updatedUser,
+      user: output,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });

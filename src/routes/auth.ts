@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 require("dotenv");
 const router = express.Router();
 const { SECRET_KEY_AUTH, TOKEN_EXPIRE_TIME } = process.env;
+import { authenticate } from "../middlewares/auth";
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
@@ -24,6 +25,29 @@ router.post("/login", async (req: Request, res: Response) => {
     res.send({ user, token });
   } catch (error) {
     res.status(400).send({ error: error.message });
+  }
+});
+
+router.post("/logout", authenticate, async (req: any, res: Response) => {
+  try {
+    const currentToken = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (currentToken) {
+      const user = await User.findByPk(req.user.id);
+
+      if (user) {
+        await user.blacklistedTokens.push(currentToken);
+        await user.save();
+      } else {
+        throw new Error("User not found");
+      }
+    } else {
+      throw new Error("User not found");
+    }
+
+    res.send({ message: "Logout successful" });
+  } catch (error) {
+    res.status(500).send({ error: "Internal server error" });
   }
 });
 

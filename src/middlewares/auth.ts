@@ -1,5 +1,3 @@
-// middleware/auth.ts
-
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../../models/index";
@@ -23,6 +21,10 @@ export const authenticate = async (
 
     if (!user) {
       throw new Error("User not found!");
+    }
+
+    if (user.blacklistedTokens.includes(token)) {
+      throw new Error("Token has been expired!");
     }
 
     req.user = user;

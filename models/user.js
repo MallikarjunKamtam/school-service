@@ -4,9 +4,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-      // Define associations if needed
-    }
+    static associate(models) {}
   }
   User.init(
     {
@@ -22,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
+      blacklistedTokens: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
     },
     {
       sequelize,
